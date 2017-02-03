@@ -21,8 +21,8 @@ public class ArticlesDAO {
 	 * @param article
 	 */
 	public void save(final Articles article) {
-		final String sql = "insert into articles(AUTHOR_ID,TITLE,CREATED_DATE,CONTENT,MODIFIED_DATE,STATUS) values (?,?,?,?,?,?)";
-		final Object[] params = {article.getAuthorId().getId(),article.getTitle(),article.getCreatedDate(),article.getContent(),article.getModifiedDate(),article.getStatus()};
+		final String sql = "insert into articles(AUTHOR_ID,TITLE,CREATED_DATE,CONTENT,STATUS,MODIFIED_DATE) values (?,?,?,?,?,?)";
+		final Object[] params = {article.getAuthorId().getId(),article.getTitle(),article.getCreatedDate(),article.getContent(),article.getStatus(),article.getModifiedDate()};
 		jdbcTemplate.update(sql, params);
 
 	}
@@ -49,7 +49,7 @@ public class ArticlesDAO {
 
 	}
 	public List<Articles> list() {
-		final String sql = "select ID,AUTHOR_ID,CREATED_DATE,ARTICLE_CONTENT,MODIFIED_DATE,STATUS from articles";
+		final String sql = "select ID,AUTHOR_ID,TITLE,CREATED_DATE,CONTENT,MODIFIED_DATE,STATUS from articles";
 		return jdbcTemplate.query(sql, (rs, rowNum) -> 
 			 convert(rs)
 	);
@@ -76,6 +76,25 @@ public class ArticlesDAO {
 		article.setStatus(rs.getBoolean("STATUS"));
 		return article;
 	}
+	public Integer getArticleLastInsertedId()
+	{
+		String sql="select ifnull((select ID from articles order by ID DESC limit 1 ),null) as ID";
+		return jdbcTemplate.queryForObject(sql,(rs,rowNum)->
+		{
+			return rs.getInt("ID");
+		});
+	}
+	public List<Articles> listarticles(int id) 
+	{
+	final String sql="select TITLE,CONTENT from articles where AUTHOR_ID=?";
+	Object[] params={id};
+	return jdbcTemplate.query(sql,params,(rs, rowNum) ->{
+	Articles article =new Articles();
+	article.setTitle(rs.getString("TITLE"));
+	article.setContent(rs.getString("CONTENT"));
+	return article;
 	
+	});
+}
 }
 

@@ -20,12 +20,14 @@ import com.bhuvana.util.ConnectionUtil;
 		 * 
 		 * @param articlecategory
 		 */
-		public void save(final ArticleCategory articleCategory) {
+		public void save(final ArticlesDAO articleDAO,CategoryDAO categoryDAO) {
 			final String sql = "insert into article_category (ARTICLE_ID,CATEGORY_ID) values (?,?) ";
-			final Object[] params = {articleCategory.getArticleId().getId(),articleCategory.getCategoryId().getId()};
+			final Object[] params = {articleDAO.getArticleLastInsertedId(),categoryDAO.getCategoryLastInsertedId()};
 			jdbcTemplate.update(sql, params);
 
 		}
+		
+
 		/**
 		 * TO DELETE A RECORD FROM THE ARTICLE CATEGORY RELATION
 		 * 
@@ -37,6 +39,8 @@ import com.bhuvana.util.ConnectionUtil;
 			jdbcTemplate.update(sql, params);
 
 		}
+
+		
 		/**
 		 * TO UPDATE A RECORD IN THE ARTICLE CATEGORY RELATION
 		 * 

@@ -45,9 +45,42 @@ public class AuthorDetailsService {
 			}
 
 		}
-
-		public void provideListAllUsers() {
+		public void provideLogin(AuthorDetails user) throws ServiceException {
+			AuthorDetailsValidator userValidator = new AuthorDetailsValidator();
 			AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
-			userDAO.list();
+
+			try {
+				userValidator.validateUpdate(user);
+				userDAO.login(user);
+			} catch (UserInvalidEntriesException e) {
+				throw new ServiceException(e.getMessage(), e);
+			}
+
 		}
-}
+		
+
+//		public void provideListAllUsers() {
+//			AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
+//			userDAO.list();
+//		}
+//		public int login() throws ServiceException
+//		{   AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
+//		    AuthorDetails user = new AuthorDetails();
+//		    try{
+//		    	if(userDAO.isValidUserName(user.getName()))
+//		    	{
+//		    		throw new Exception("Invalid Username");
+//		    	}
+//		    	else if(!userDAO.isValidPassword(user.getName(), user.getPassword()))
+//	    		{
+//	    		  throw new Exception("Invalid Password");
+//	    		}
+//		    }
+//		    catch(Exception e)
+//		    {
+//		    	throw new ServiceException("Unable to login",e);
+//		    }
+//			return 1;
+//			
+//			
+		}

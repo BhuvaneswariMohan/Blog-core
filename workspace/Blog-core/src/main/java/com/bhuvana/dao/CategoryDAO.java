@@ -20,7 +20,7 @@ import com.bhuvana.util.ConnectionUtil;
 		 * @param category
 		 */
 		public void save(final Category category) {
-			final String sql = "insert into category (NAME_OF_CATEGORY,USER_ID) values (?,?) ";
+			final String sql = "insert into category (CATEGORY_NAME,AUTHOR_ID) values (?,?) ";
 			final Object[] params = {category.getCategoryName(),category.getCategoryAuthorId().getId() };
 			jdbcTemplate.update(sql, params);
 
@@ -42,7 +42,7 @@ import com.bhuvana.util.ConnectionUtil;
 		 * @param category
 		 */
 		public void update(final Category category) {
-			final String sql = "update category set CATEGORY_NAME=? where AUHTOR_ID=?";
+			final String sql = "update category set CATEGORY_NAME=? where AUTHOR_ID=?";
 			final Object[] params = {category.getCategoryName(),category.getCategoryAuthorId().getId()};
 			jdbcTemplate.update(sql, params);
 
@@ -71,4 +71,13 @@ import com.bhuvana.util.ConnectionUtil;
 			category.setCategoryAuthorId(user);
 			return category;
 		}
+		public Integer getCategoryLastInsertedId()
+		{
+			String sql="select ifnull((select ID from category order by ID DESC limit 1 ),null) as ID";
+			return jdbcTemplate.queryForObject(sql,(rs,rowNum)->
+			{
+				return rs.getInt("ID");
+			});
+		}
+
 }

@@ -73,5 +73,25 @@ public class AuthorDetailsDAO {
 		user.setRole(role);
 		return user;
 	}
-
+//	public Boolean isValidUserName(String username) {
+//		String sql = "select FN_IS_VALID_USER(?)";
+//		return jdbcTemplate.queryForObject(sql, new Object[] {username}, Boolean.class);
+//	}
+//	public Boolean isValidPassword(String username,String password) {
+//		String sql = "select FN_IS_VALID_PASSWORD(?)";
+//		return jdbcTemplate.queryForObject(sql, new Object[] {username,password}, Boolean.class);
+//	}
+	public void login(final AuthorDetails user) {
+		final String sql = "SELECT IFNULL((SELECT 1 FROM AUTHOR_DETAILS WHERE NAME=? AND PASSWORD=?),NULL)";
+		final Object[] params = { user.getName(),user.getPassword() };
+		Integer value =jdbcTemplate.queryForObject(sql, params,Integer.class);
+		if(value!=null)
+		{
+			System.out.println("success");
+		}
+		else
+		{
+			System.out.println("failure");
+		}
+}
 }
