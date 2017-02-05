@@ -73,4 +73,16 @@ public class CommentDetailsDAO {
 		comments.setCommentUserId(user);
 		return comments;
 	}
+	public List<CommentDetails> viewCommentsByArticles(Articles article)
+	{
+		String sql="SELECT comments.`COMMENT_TEXT` FROM comments JOIN articles ON comments.`ARTICLE_ID`=articles.`ID` WHERE articles.`ARTICLE_TITLE`=?";
+		Object[] params={article.getTitle()};
+		return jdbcTemplate.query(sql,params,(rs,rowNum)-> convertComments(rs));
+	}
+	static CommentDetails convertComments(final ResultSet rs) throws SQLException {
+		CommentDetails comments=new CommentDetails();
+		comments.setCommentText(rs.getString("COMMENT_TEXT"));
+		return comments;
+	}
+	
 }

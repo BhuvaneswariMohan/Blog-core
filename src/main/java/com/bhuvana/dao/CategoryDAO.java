@@ -7,6 +7,7 @@ package com.bhuvana.dao;
 
 	import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.bhuvana.model.Articles;
 import com.bhuvana.model.AuthorDetails;
 import com.bhuvana.model.Category;
 import com.bhuvana.util.ConnectionUtil;
@@ -79,5 +80,18 @@ import com.bhuvana.util.ConnectionUtil;
 				return rs.getInt("ID");
 			});
 		}
-
+		public List<Articles> getArticlesOnCategory(Category category)
+		{
+			String sql="SELECT articles.`TITLE`,articles.`CONTENT` FROM articles JOIN `article_category` ON `article_category`.`ARTICLE_ID`=articles.`ID` JOIN category ON `article_category`.`CATEGORY_ID`=category.`ID`"
+	                    +"WHERE category.`CATEGORY_NAME`=?" ;
+			Object[] params={category.getCategoryName()};
+			return jdbcTemplate.query(sql,params,(rs,rowNum)-> convertArticles(rs));
+			
+		}
+		static Articles convertArticles(final ResultSet rs) throws SQLException {
+			Articles article=new Articles();
+			article.setTitle(rs.getString("TITLE"));
+			article.setContent(rs.getString("CONTENT"));
+			return article;
+		}
 }

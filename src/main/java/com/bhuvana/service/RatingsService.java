@@ -47,4 +47,5 @@ public class RatingsService {
 			RatingsDAO ratingDAO = new RatingsDAO();
 			ratingDAO.list();
 		}
+		
 }
