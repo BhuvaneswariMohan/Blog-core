@@ -1,0 +1,4 @@
+com\bhuvana\service\TestArticlesService.class
+com\bhuvana\dao\TestCategoryDAO.class
+com\bhuvana\service\TestAuthorDetailsService.class
+com\bhuvana\dao\TestAuthorDetailsDAO.class

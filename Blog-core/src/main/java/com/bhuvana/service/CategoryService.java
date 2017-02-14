@@ -1,5 +1,7 @@
 package com.bhuvana.service;
 
+import java.util.List;
+
 import com.bhuvana.dao.CategoryDAO;
 import com.bhuvana.exception.CategoryInvalidEntriesException;
 import com.bhuvana.exception.ServiceException;
@@ -40,9 +42,9 @@ public class CategoryService {
 		}
 	}
 
-	public void provideListAllCategories() {
+	public List<Category> provideListAllCategories() {
 		CategoryDAO categoryDAO = new CategoryDAO();
-		categoryDAO.list();
+		return categoryDAO.list();
 	}
 }
 

@@ -96,5 +96,20 @@ public class ArticlesDAO {
 	
 	});
 }
+	public List<Articles> getArticlesPublishedByUser(AuthorDetails userDetail)
+	{
+		String sql="SELECT ID,TITLE,CONTENT,CREATED_DATE,MODIFIED_DATE FROM ARTICLES WHERE ARTICLES.`AUTHOR_ID`=? AND STATUS=1";
+		Object[] params={userDetail.getId()};
+		return jdbcTemplate.query(sql, params,(rs,rowNum)-> convertArticles(rs));
+	}
+	static Articles convertArticles(final ResultSet rs) throws SQLException {
+		Articles article=new Articles();
+		article.setId(rs.getInt("ID"));
+		article.setTitle(rs.getString("TITLE"));
+		article.setContent(rs.getString("CONTENT"));
+		article.setCreatedDate(rs.getTimestamp("CREATED_DATE").toLocalDateTime());
+		article.setModifiedDate(rs.getTimestamp("MODIFIED_DATE").toLocalDateTime());
+		return article;
+	}
 }
 

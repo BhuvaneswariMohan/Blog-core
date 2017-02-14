@@ -57,5 +57,10 @@ public void validateSave(Articles article) throws ArticleInvalidEntriesException
 		 throw new ArticleInvalidEntriesException(ENTER_VALID_ID);
 	 } 
  }
+ public void validateTitle(Articles article) throws ArticleInvalidEntriesException {
+		if (article.getTitle() == null || "".equals(article.getTitle().trim())) {
+			throw new ArticleInvalidEntriesException("Invalid Title");
+		}
+	}
 }
 

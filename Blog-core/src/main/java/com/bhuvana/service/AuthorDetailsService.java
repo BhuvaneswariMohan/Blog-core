@@ -1,6 +1,9 @@
 package com.bhuvana.service;
 
+import java.util.List;
+
 import com.bhuvana.dao.AuthorDetailsDAO;
+// import com.bhuvana.exception.RoleInvalidEntriesException;
 import com.bhuvana.exception.ServiceException;
 import com.bhuvana.exception.UserInvalidEntriesException;
 import com.bhuvana.model.AuthorDetails;
@@ -45,42 +48,36 @@ public class AuthorDetailsService {
 			}
 
 		}
-		public void provideLogin(AuthorDetails user) throws ServiceException {
-			AuthorDetailsValidator userValidator = new AuthorDetailsValidator();
-			AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
-
+		public Integer provideLogin(AuthorDetails user) throws ServiceException {
+			AuthorDetailsDAO userDetailDAO = new AuthorDetailsDAO();
 			try {
-				userValidator.validateUpdate(user);
-				userDAO.login(user);
-			} catch (UserInvalidEntriesException e) {
-				throw new ServiceException(e.getMessage(), e);
+				Integer i=userDetailDAO.getIdByEI(user.getEmailid()).getId();
+				Integer j=userDetailDAO.getIdByPW(user.getPassword()).getId();
+				userDetailDAO.checkUser(i, j);
+				return i;
+			} 
+			catch (Exception e) {
+				throw new ServiceException("Unable to login",e);
 			}
-
+			
 		}
 		
 
-//		public void provideListAllUsers() {
-//			AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
-//			userDAO.list();
-//		}
-//		public int login() throws ServiceException
-//		{   AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
-//		    AuthorDetails user = new AuthorDetails();
-//		    try{
-//		    	if(userDAO.isValidUserName(user.getName()))
-//		    	{
-//		    		throw new Exception("Invalid Username");
-//		    	}
-//		    	else if(!userDAO.isValidPassword(user.getName(), user.getPassword()))
-//	    		{
-//	    		  throw new Exception("Invalid Password");
-//	    		}
-//		    }
-//		    catch(Exception e)
-//		    {
-//		    	throw new ServiceException("Unable to login",e);
-//		    }
-//			return 1;
-//			
-//			
+		public List<AuthorDetails> provideListAllUsers() {
+			AuthorDetailsDAO userDAO = new AuthorDetailsDAO();
+			return userDAO.list();
+		}
+		public void serviceLogin(AuthorDetails user) throws ServiceException {
+			AuthorDetailsDAO userDetailDAO = new AuthorDetailsDAO();
+		try {
+			Integer i=userDetailDAO.getIdByEI(user.getEmailid()).getId();
+			Integer j=userDetailDAO.getIdByPW(user.getPassword()).getId();
+			userDetailDAO.checkUser(i, j);
+		} 
+		catch (Exception e) {
+			throw new ServiceException("Unable to login",e);
+		}
+		
+	}
+			
 		}

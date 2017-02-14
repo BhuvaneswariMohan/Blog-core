@@ -18,7 +18,7 @@ public class CommentDetailsDAO {
 	 * @param comments
 	 */
 	public void save(final CommentDetails comments) {
-		final String sql = "insert into comment_details (ARTICLE_ID,AUTHOR_ID,COMMENTS_GIVEN) values (?,?,?) ";
+		final String sql = "insert into comment_details (ARTICLE_ID,AUTHOR_ID,TEXT) values (?,?,?) ";
 		final Object[] params = { comments.getCommentArticleId().getId(), comments.getCommentUserId().getId(),
 				comments.getCommentText() };
 		jdbcTemplate.update(sql, params);
@@ -43,14 +43,14 @@ public class CommentDetailsDAO {
 	 * @param comments
 	 */
 	public void update(final CommentDetails comments) {
-		final String sql = "update comment_details set COMMENT_TEXT=? where ARTICLE_ID=?";
+		final String sql = "update comment_details set TEXT=? where ARTICLE_ID=?";
 		final Object[] params = { comments.getCommentText(), comments.getCommentArticleId().getId() };
 		jdbcTemplate.update(sql, params);
 
 	}
 
 	public List<CommentDetails> list() {
-		final String sql = "select ID,ARTICLE_ID,USER_ID,COMMENT_TEXT from comment_details";
+		final String sql = "select ID,ARTICLE_ID,AUTHOR_ID,TEXT from comment_details";
 		return jdbcTemplate.query(sql, (rs, rowNum) -> convert(rs));
 
 	}
@@ -75,13 +75,13 @@ public class CommentDetailsDAO {
 	}
 	public List<CommentDetails> viewCommentsByArticles(Articles article)
 	{
-		String sql="SELECT comments.`COMMENT_TEXT` FROM comments JOIN articles ON comments.`ARTICLE_ID`=articles.`ID` WHERE articles.`ARTICLE_TITLE`=?";
+		String sql="SELECT comment_details.`TEXT` FROM comment_details JOIN articles ON comment_details.`ARTICLE_ID`=articles.`ID` WHERE articles.`ARTICLE_TITLE`=?";
 		Object[] params={article.getTitle()};
 		return jdbcTemplate.query(sql,params,(rs,rowNum)-> convertComments(rs));
 	}
 	static CommentDetails convertComments(final ResultSet rs) throws SQLException {
 		CommentDetails comments=new CommentDetails();
-		comments.setCommentText(rs.getString("COMMENT_TEXT"));
+		comments.setCommentText(rs.getString("TEXT"));
 		return comments;
 	}
 	
